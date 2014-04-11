@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Date: 2014-04-10
@@ -13,13 +14,8 @@ import java.util.List;
  * @author niehm
  */
 public class World {
-
     private List<List<Boolean>> field;
-
-    @Getter
     private int xMax;
-
-    @Getter
     private int yMax;
 
     public World(){
@@ -33,7 +29,9 @@ public class World {
         field = new ArrayList<>(yMax);
         for(int i=0; i< yMax; i++){
             field.add(i, new ArrayList<>(xMax));
-            Collections.fill(field.get(i), false);
+            for(int j=0; j<xMax; j++){
+                field.get(i).add(j,false);
+            }
         }
     }
 
@@ -55,5 +53,39 @@ public class World {
             }
         }
         return neighbors;
+    }
+
+    public void genocide(){
+        field.parallelStream().forEach(xList -> Collections.fill(xList, false));
+    }
+
+    public void resurrect(int x, int y){
+        field.get(y).add(x, true);
+    }
+
+    public void populate(int count){
+        Random rnd = new Random();
+        while(count > 0){
+            int y = rnd.nextInt(yMax);
+            int x = rnd.nextInt(xMax);
+            if(isAlive(x, y)){
+                continue;
+            } else{
+                resurrect(x, y);
+                count--;
+            }
+        }
+    }
+
+    public List<List<Boolean>> getField() {
+        return field;
+    }
+
+    public int getXMax() {
+        return xMax;
+    }
+
+    public int getYMax() {
+        return yMax;
     }
 }
