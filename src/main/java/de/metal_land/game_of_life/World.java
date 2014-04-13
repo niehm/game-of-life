@@ -88,4 +88,8 @@ public class World {
     public int getYMax() {
         return yMax;
     }
+
+    public int population(){
+        return field.parallelStream().mapToInt(xList -> (int)xList.stream().filter(cell -> cell).count()).sum();
+    }
 }

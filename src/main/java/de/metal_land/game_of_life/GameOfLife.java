@@ -1,6 +1,7 @@
 package de.metal_land.game_of_life;
 
 import java.util.List;
+import java.util.Observable;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
@@ -14,18 +15,37 @@ public class GameOfLife {
     private World current;
     private World next;
     private ForkJoinPool pool;
+    private Gui.DataChangedEventListener listener;
 
     public GameOfLife(){
         current = new World(100, 100);
         next = new World(100, 100);
         pool = new ForkJoinPool();
+        current.populate(500);
     }
 
     public void letThereBeLight(){
-        current.populate(500);
+        int lastPopulationCount = 0;
+        int stagnation = 0;
 
         for(int i=0;i<10000;i++){
             nextPopulation();
+            if(lastPopulationCount == current.population()){
+                stagnation++;
+                if(stagnation>5){
+                    break;
+                }
+            } else {
+                lastPopulationCount = current.population();
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //Template
+            }
+            System.out.printf("Generation %d with Population %d\n", i, current.population());
+            listener.changed(current);
         }
 
         long living = 0;
@@ -63,8 +83,18 @@ public class GameOfLife {
         next.genocide();
     }
 
+    public void setListener(Gui.DataChangedEventListener listener){
+        this.listener = listener;
+    }
+
+    public World getWorld(){
+        return current;
+    }
+
     public static void main(String[] args) {
         GameOfLife game = new GameOfLife();
+        Gui gui = new Gui(game);
+        new Thread(gui).start();
         game.letThereBeLight();
     }
 }
