@@ -47,7 +47,7 @@ public class World {
         List<Boolean> neighbors = new ArrayList<>(8);
         for(int i = y-1; i<=y+1; i++){
             for(int j=x-1;j<=x+1; j++){
-                if(i!=j && i>=0 && j>=0 && i<yMax && j<xMax){
+                if(!(i==y && j==x) && i>=0 && j>=0 && i<yMax && j<xMax){
                     neighbors.add(field.get(i).get(j));
                 }
             }
@@ -64,6 +64,7 @@ public class World {
     }
 
     public void populate(int count){
+        genocide();
         Random rnd = new Random();
         while(count > 0){
             int y = rnd.nextInt(yMax);
@@ -75,6 +76,15 @@ public class World {
                 count--;
             }
         }
+    }
+
+    public void populate(){
+        genocide();
+        resurrect(52, 52);
+        resurrect(53, 52);
+        resurrect(51, 53);
+        resurrect(52, 53);
+        resurrect(52, 54);
     }
 
     public List<List<Boolean>> getField() {

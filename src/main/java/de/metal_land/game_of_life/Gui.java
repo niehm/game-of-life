@@ -14,7 +14,11 @@ public class Gui implements Runnable {
     private PaintPanel panel;
 
     public Gui(GameOfLife game){
-        panel = new PaintPanel(game.getWorld());
+        this(game, 10);
+    }
+
+    public Gui(GameOfLife game, int fieldSize){
+        panel = new PaintPanel(game.getWorld(), fieldSize);
         game.setListener(world -> {
             panel.setWorld(world);
             window.repaint();
@@ -43,9 +47,6 @@ public class Gui implements Runnable {
         private World world;
 
         private int fieldSize;
-        public PaintPanel(World world){
-            this(world, 10);
-        }
 
         public PaintPanel(World world, int fieldSize){
             this.world = world;

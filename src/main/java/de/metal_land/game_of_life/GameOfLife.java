@@ -17,33 +17,24 @@ public class GameOfLife {
     private ForkJoinPool pool;
     private Gui.DataChangedEventListener listener;
 
-    public GameOfLife(){
-        current = new World(100, 100);
-        next = new World(100, 100);
+    public GameOfLife(int xMax, int yMax){
+        current = new World(xMax, yMax);
+        next = new World(xMax, yMax);
         pool = new ForkJoinPool();
-        current.populate(500);
+        current.populate((int) Math.round(xMax * yMax * 0.3));
     }
 
     public void letThereBeLight(){
-        int lastPopulationCount = 0;
-        int stagnation = 0;
 
         for(int i=0;i<10000;i++){
-            nextPopulation();
-            if(lastPopulationCount == current.population()){
-                stagnation++;
-                if(stagnation>5){
-                    break;
-                }
-            } else {
-                lastPopulationCount = current.population();
-            }
-
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //Template
             }
+
+            nextPopulation();
+
             System.out.printf("Generation %d with Population %d\n", i, current.population());
             listener.changed(current);
         }
@@ -92,8 +83,14 @@ public class GameOfLife {
     }
 
     public static void main(String[] args) {
-        GameOfLife game = new GameOfLife();
-        Gui gui = new Gui(game);
+        int x = 100;
+        int y = 100;
+        if(args.length == 2){
+            x = Integer.valueOf(args[0]);
+            y = Integer.valueOf(args[1]);
+        }
+        GameOfLife game = new GameOfLife(x, y);
+        Gui gui = new Gui(game, 5);
         new Thread(gui).start();
         game.letThereBeLight();
     }

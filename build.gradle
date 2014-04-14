@@ -1,7 +1,9 @@
 apply plugin: 'java'
+apply plugin:'application'
 
 sourceCompatibility = 1.8
 version = '1.0'
+mainClassName = "de.metal_land.game_of_life.GameOfLife"
 
 repositories {
     mavenCentral()
@@ -15,4 +17,10 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "Game of Life", "Implementation-Version": version)
+    }
 }
