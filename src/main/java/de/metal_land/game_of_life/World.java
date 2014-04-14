@@ -56,7 +56,12 @@ public class World {
     }
 
     public void genocide(){
-        field.parallelStream().forEach(xList -> Collections.fill(xList, false));
+        field.parallelStream()
+                .forEach(xList -> {
+                    xList.stream()
+                            .filter(cell -> cell)
+                            .forEach(cell -> cell=false);
+                });
     }
 
     public void resurrect(int x, int y){
@@ -69,9 +74,7 @@ public class World {
         while(count > 0){
             int y = rnd.nextInt(yMax);
             int x = rnd.nextInt(xMax);
-            if(isAlive(x, y)){
-                continue;
-            } else{
+            if(isDead(x, y)){
                 resurrect(x, y);
                 count--;
             }

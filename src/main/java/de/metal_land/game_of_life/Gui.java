@@ -36,7 +36,6 @@ public class Gui implements Runnable {
 
         window.add(panel, BorderLayout.CENTER);
 
-
         window.pack();
         window.setVisible(true);
 
@@ -51,7 +50,6 @@ public class Gui implements Runnable {
         public PaintPanel(World world, int fieldSize){
             this.world = world;
             this.fieldSize = fieldSize;
-            setBorder(BorderFactory.createLineBorder(Color.black));
         }
 
         @Override

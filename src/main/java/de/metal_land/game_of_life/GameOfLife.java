@@ -57,12 +57,10 @@ public class GameOfLife {
                             .stream()
                             .filter(alive -> alive)
                             .count();
-                    if(current.isDead(x,y) && living == 3){
-                        next.resurrect(x,y);
-                    } else if (current.isAlive(x, y) && living >= 2 && living <= 3){
+                    if((current.isDead(x,y) && living == 3) ||
+                            (current.isAlive(x, y) && living >= 2 && living <= 3)){
                         next.resurrect(x,y);
                     }
-
                 }
             });
         }
