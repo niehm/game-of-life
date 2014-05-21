@@ -1,8 +1,5 @@
 package de.metal_land.game_of_life;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,11 +54,7 @@ public class World {
 
     public void genocide(){
         field.parallelStream()
-                .forEach(xList -> {
-                    xList.stream()
-                            .filter(cell -> cell)
-                            .forEach(cell -> cell=false);
-                });
+                .forEach(xList -> Collections.fill(xList, false));
     }
 
     public void resurrect(int x, int y){
@@ -83,11 +76,22 @@ public class World {
 
     public void populate(){
         genocide();
-        resurrect(52, 52);
-        resurrect(53, 52);
-        resurrect(51, 53);
-        resurrect(52, 53);
-        resurrect(52, 54);
+
+        resurrect(xMax/2+1, yMax/2);
+        resurrect(xMax/2+2, yMax/2);
+        resurrect(xMax/2, yMax/2+1);
+        resurrect(xMax/2+1, yMax/2+1);
+        resurrect(xMax/2+1, yMax/2+2);
+        /*
+        resurrect(xMax/2-1,yMax/2-1);
+        resurrect(xMax/2-1,yMax/2+2);
+        resurrect(xMax/2+2,yMax/2-1);
+        resurrect(xMax/2,yMax/2);
+        resurrect(xMax/2,yMax/2+1);
+        resurrect(xMax/2+1,yMax/2);
+        resurrect(xMax/2+1,yMax/2+1);
+        resurrect(xMax/2+2,yMax/2+2);
+        */
     }
 
     public List<List<Boolean>> getField() {

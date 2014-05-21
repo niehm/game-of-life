@@ -1,7 +1,6 @@
 package de.metal_land.game_of_life;
 
 import java.util.List;
-import java.util.Observable;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
@@ -21,14 +20,15 @@ public class GameOfLife {
         current = new World(xMax, yMax);
         next = new World(xMax, yMax);
         pool = new ForkJoinPool();
-        current.populate((int) Math.round(xMax * yMax * 0.3));
+        //current.populate((int) Math.round(xMax * yMax * 0.3));
+        current.populate();
     }
 
     public void letThereBeLight(){
 
         for(int i=0;i<10000;i++){
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //Template
             }
@@ -57,8 +57,13 @@ public class GameOfLife {
                             .stream()
                             .filter(alive -> alive)
                             .count();
+                    /*
                     if((current.isDead(x,y) && living == 3) ||
                             (current.isAlive(x, y) && living >= 2 && living <= 3)){
+                        next.resurrect(x,y);
+                    } */
+
+                    if(living % 2 == 1){
                         next.resurrect(x,y);
                     }
                 }
@@ -81,14 +86,14 @@ public class GameOfLife {
     }
 
     public static void main(String[] args) {
-        int x = 100;
-        int y = 100;
+        int x = 200;
+        int y = 200;
         if(args.length == 2){
             x = Integer.valueOf(args[0]);
             y = Integer.valueOf(args[1]);
         }
         GameOfLife game = new GameOfLife(x, y);
-        Gui gui = new Gui(game, 5);
+        Gui gui = new Gui(game, 2);
         new Thread(gui).start();
         game.letThereBeLight();
     }
